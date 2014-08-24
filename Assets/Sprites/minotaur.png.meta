@@ -1,0 +1,147 @@
+fileFormatVersion: 2
+guid: 091b5fedbffff48d8931b9ecd5f75b1b
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: minotaur
+    21300002: minotaur_0
+    21300004: minotaur_1
+    21300006: minotaur_2
+    21300008: minotaur_3
+    21300010: minotaur_4
+    21300012: minotaur_5
+    21300014: minotaur_6
+    21300016: minotaur_7
+    21300018: minotaur_8
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: 0
+    aniso: 1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: minotaur_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 40
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: minotaur_1
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 40
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: minotaur_2
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 40
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: minotaur_3
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 40
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: minotaur_4
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 40
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: minotaur_5
+      rect:
+        serializedVersion: 2
+        x: 550
+        y: 40
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: minotaur_6
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 40
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: minotaur_7
+      rect:
+        serializedVersion: 2
+        x: 770
+        y: 40
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: minotaur_8
+      rect:
+        serializedVersion: 2
+        x: 880
+        y: 40
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 

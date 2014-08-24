@@ -5,6 +5,8 @@ public class Attackable : MonoBehaviour {
 	public Transform sparkParticle, dieParticle;
 	
 	public int hp;	
+	public bool isFlash;
+	public float flashCounter;
 
 	// Use this for initialization
 	public virtual void Start () {
@@ -13,14 +15,31 @@ public class Attackable : MonoBehaviour {
 	
 	// Update is called once per frame
 	public virtual void Update () {
-		
+		UpdateFlash ();
+	}
+
+	void UpdateFlash(){
+		if (isFlash) {
+			flashCounter += Time.deltaTime;
+			if(flashCounter > 0.08f){
+				isFlash = false;
+				flashCounter = 0;
+			}
+		}
+
+		if (isFlash) {
+			// flash sprite
+			GetComponent<SpriteRenderer> ().color = Color.red;
+		} 
+		else {
+			// normal
+			GetComponent<SpriteRenderer>( ).color = Color.white;
+		}
 	}
 
 	public virtual void OnTriggerEnter2D(Collider2D col){
-		BulletHit (col);
-
-
-		Debug.Log ("hit");
+		if(col.gameObject.tag == "playerbullet")
+			BulletHit (col);
 	}
 
 	void BulletHit(Collider2D col){
@@ -30,7 +49,7 @@ public class Attackable : MonoBehaviour {
 			Hit (bullet.damage);
 
 			// instantiate particle
-			Instantiate (sparkParticle, bullet.gameObject.transform.position, Quaternion.identity);
+			Instantiate (sparkParticle, transform.position, Quaternion.identity);
 
 			// destroy bullet
 			Destroy (bullet.gameObject);
@@ -43,6 +62,8 @@ public class Attackable : MonoBehaviour {
 		if (hp <= 0) {
 			Die ();
 		}
+
+		isFlash = true;
 	}
 
 	public virtual void Die(){

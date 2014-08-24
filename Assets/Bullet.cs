@@ -2,20 +2,30 @@
 using System.Collections;
 
 public class Bullet : MonoBehaviour {
-
-	float speed = 40f;
+	public float range;
+	public float speed = 30f;
 	public int damage;
 	public Transform wallSpark;
+	public Vector3 initialPos; // bullets starting position, used for range
 
 	// Use this for initialization
-	void Start () {
+	public virtual void Start () {
+		initialPos = transform.position;
 		damage = Player.damage;
 		Destroy (gameObject, 20);
 		rigidbody2D.velocity = transform.right * speed;
+		range = 20;
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	public virtual void Update () {
+		CalculateRange ();
+	}
+
+	void CalculateRange(){
+		if (Vector3.Distance (initialPos, transform.position) > range) {
+			Destroy (this.gameObject);		
+		}
 	}
 
 	void OnTriggerEnter2D(Collider2D col){
