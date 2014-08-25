@@ -6,6 +6,7 @@ public class Enemy : Attackable {
 
 	// movement
 	public float dir;
+	float distanceFromPlayer;
 
 	// atk stats
 	public bool canAtk;
@@ -94,5 +95,9 @@ public class Enemy : Attackable {
 	}
 
 	public virtual void Attack(){
+	}
+
+	public virtual void CheckDistanceFromPlayer(){
+		distanceFromPlayer = Vector3.Distance(transform.position, GameObject.Find ("player").transform.position);
 	}
 }

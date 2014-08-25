@@ -15,6 +15,8 @@ public class Mino : Enemy {
 	public override void Update () {
 		base.Update ();
 
+		CheckDistanceFromPlayer ();
+
 		if(Player.EnemyCanActionPlayer())
 			FollowPlayer ();
 	}

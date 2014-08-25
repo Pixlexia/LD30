@@ -25,9 +25,14 @@ public class Player : MonoBehaviour {
 	bool facingRight;
 
 	// Physics stuff
+	public const float defaultGravity = 4f;
+	public const float waterGravity = 0.1f;
+	public const float flyGravity = 1f;
 	bool onGround;
-	public bool canFly;
-	public bool canSwim;
+	public bool hasWings, canFly, isFlying;
+	public bool hasSwim, isSwimming;
+	const float maxFlySpeed = 6;
+	const float maxSwimSpeed = -2;
 
 	// Attack stuff
 	public bool isMelee;
@@ -58,11 +63,15 @@ public class Player : MonoBehaviour {
 		dieTime = 0.1f; // player dies if enemy is colliding for this long
 		state = LifeState.alive;
 
-		respawnTime = 3; // time before player respawns from deadonground
+		respawnTime = 1.5f; // time before player respawns from deadonground
 		respawnCounter = 0;
 
-		invulTime = 3; // time player is invulnerable upon respawning
+		invulTime = 2.5f; // time player is invulnerable upon respawning
 		invulCounter = 0;
+
+		// physics
+		canFly = false;
+		isFlying = false;
 	}
 	
 	// Update is called once per frame
@@ -196,7 +205,7 @@ public class Player : MonoBehaviour {
 	void Movement(){
 		if (Input.GetKey (KeyCode.LeftArrow)) {
 			facingRight = false;
-//			rigidbody2D.AddRelativeForce(new Vector2(speed,0));
+//			rigidbody2D.AddRelativeForce(new Vector2(-speed,0));
 			rigidbody2D.velocity = new Vector2(-speed,rigidbody2D.velocity.y);
 		} else if (Input.GetKey (KeyCode.RightArrow)) {
 			facingRight = true;
@@ -208,19 +217,36 @@ public class Player : MonoBehaviour {
 		}
 		
 		Jump ();		
-		if(canFly) 
+		if(hasWings) 
 			FlyControls ();
-		if(canSwim)
+		if(hasSwim)
 			SwimControls ();
 	}
 
 	void FlyControls(){
-		if (Input.GetKey (KeyCode.Space)) {
-			transform.rigidbody2D.AddRelativeForce(new Vector2(0, 20));		
+		if (!onGround) {
+			if(Input.GetKeyUp (KeyCode.Z)){
+				canFly = true;
+			}
+		}
+
+		if(canFly && Input.GetKey (KeyCode.Z)) {
+			isFlying = true;
+			rigidbody2D.gravityScale = flyGravity;
+			if(rigidbody2D.velocity.y < maxFlySpeed)
+				transform.rigidbody2D.AddForce(new Vector2(0, 30));		
 		}
 	}
 
 	void SwimControls(){
+		if (isSwimming) {
+			Debug.Log (rigidbody2D.velocity.y);
+			if(rigidbody2D.velocity.y < maxSwimSpeed){
+				rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, maxSwimSpeed);
+			}
+		} 
+		else {
+		}
 	}
 
 	void Death(){
@@ -277,7 +303,6 @@ public class Player : MonoBehaviour {
 	void Jump(){
 		// check if on ground
 		if(Mathf.Round (rigidbody2D.velocity.y) == 0){
-			onGround = true;
 		}
 		else{
 			onGround = false;
@@ -286,6 +311,29 @@ public class Player : MonoBehaviour {
 		if (onGround && Input.GetKeyDown (KeyCode.Z)) {
 			transform.rigidbody2D.AddForce (new Vector2 (0, jumpForce));		
 		}
+	}
+
+	void StartSwim(){
+		rigidbody2D.gravityScale = waterGravity;
+		isSwimming = true;
+		canFly = false;
+	}
+
+	void EndSwim(){
+		rigidbody2D.gravityScale = defaultGravity;
+		isSwimming = false;
+		canFly = true;
+	}
+
+	void TouchGround(){
+		onGround = true;
+		canFly = false;
+		EndFly ();
+	}
+
+	void EndFly(){
+		isFlying = false;
+		rigidbody2D.gravityScale = defaultGravity;
 	}
 
 	void OnCollisionStay2D(Collision2D col){
@@ -302,16 +350,34 @@ public class Player : MonoBehaviour {
 			Die(x);
 	}
 
+	void OnTriggerEnter2D(Collider2D col){
+		if (col.gameObject.tag == "water") {
+			StartSwim();
+		}
+	}
+
+	void OnTriggerExit2D(Collider2D col){
+		if(col.gameObject.tag == "water"){
+			EndSwim();
+		}
+	}
+
 	void OnCollisionExit2D(Collision2D col){
 		if (col.gameObject.tag == "enemy") {
 			collideEnemyTime = 0;
 		}
+
+		if (col.gameObject.tag == "water")
+			isSwimming = false;
 	}
 
 	void OnCollisionEnter2D(Collision2D col){
 		if (isAlive && col.gameObject.tag == "enemy") {
 		}
 		else{
+			if(col.gameObject.tag == "obstacle" && rigidbody2D.velocity.y == 0)
+				TouchGround();
+
 			if(state == LifeState.knockback && col.gameObject.tag == "obstacle"){
 				rigidbody2D.velocity = new Vector2(0,0);
 				respawnCounter = 0;
