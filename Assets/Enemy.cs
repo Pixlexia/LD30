@@ -5,12 +5,13 @@ public class Enemy : Attackable {
 	public Animator anim;
 
 	// movement
-	public float dir;
-	float distanceFromPlayer;
+	public float dir; // -1 = player is in left of enemy, if 1 = player right of enemy
+	public float distanceFromPlayer;
 
 	// atk stats
 	public bool canAtk;
 	public float atkCounter, atkDelay;
+	public float rangeAttemptAttack;
 
 	public float speed;
 
@@ -34,6 +35,9 @@ public class Enemy : Attackable {
 		UpdateAttacks ();
 		UpdateMovement ();
 		UpdateAnimations ();
+		CheckDistanceFromPlayer ();
+
+		Physics2D.IgnoreLayerCollision(8, 11, (this.rigidbody2D.velocity.y > 0.0f)); 
 	}
 
 	void OnCollisionStay2D(Collision2D col){
@@ -46,13 +50,15 @@ public class Enemy : Attackable {
 		}
 	}
 
-	void UpdateAnimations(){
+	public virtual void UpdateAnimations(){
 
-		anim.SetInteger ("x", (int)rigidbody2D.velocity.x);
+		if(anim != null)
+			anim.SetInteger ("x", (int)rigidbody2D.velocity.x);
 
 		int flip = (dir > 0) ? 1 : -1;
 
-		transform.localScale = new Vector3 ((float) flip, 1f, 1f);
+		if(this.gameObject.tag != "boss")
+			transform.localScale = new Vector3(flip, 1, 1);
 
 	}
 
@@ -61,9 +67,8 @@ public class Enemy : Attackable {
 			dir = GameObject.Find ("player").transform.position.x - transform.position.x;
 		}
 		else{
-			rigidbody2D.velocity = new Vector2 (0, 0);
+			rigidbody2D.velocity = new Vector2 (0, rigidbody2D.velocity.y);
 		}
-
 	}
 
 	public override void Hit (int damage)
@@ -75,10 +80,10 @@ public class Enemy : Attackable {
 	}
 
 	void Knockback(){
-		float dir = GameObject.Find ("player").transform.position.x - transform.position.x;
+		float knockbackDir = GameObject.Find ("player").transform.position.x - transform.position.x;
 
 		float knock = (rigidbody2D.velocity.x == 0) ? 1500 : 1500;
-		int mod = (dir > 0) ? -1 : 1;
+		int mod = (knockbackDir > 0) ? -1 : 1;
 		rigidbody2D.AddForce (new Vector2 (mod * knock, 0));	
 	}
 
@@ -95,6 +100,18 @@ public class Enemy : Attackable {
 	}
 
 	public virtual void Attack(){
+		ResetAttackCounter ();
+	}
+
+	public virtual void ResetAttackCounter(){
+		canAtk = false;
+		atkCounter = 0;
+	}
+
+	public virtual void FollowPlayer(){
+		float mod = (dir > 0) ? 1 : -1;
+
+		rigidbody2D.AddRelativeForce(new Vector2(mod * speed, 0));
 	}
 
 	public virtual void CheckDistanceFromPlayer(){

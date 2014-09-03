@@ -66,7 +66,7 @@ public class Player : MonoBehaviour {
 		respawnTime = 1.5f; // time before player respawns from deadonground
 		respawnCounter = 0;
 
-		invulTime = 2.5f; // time player is invulnerable upon respawning
+		invulTime = 1.5f; // time player is invulnerable upon respawning
 		invulCounter = 0;
 
 		// physics
@@ -85,6 +85,8 @@ public class Player : MonoBehaviour {
 			Death ();
 
 		UpdateAnimation ();
+
+		Physics2D.IgnoreLayerCollision(10, 11, (this.rigidbody2D.velocity.y > 0.0f)); 
 
 	}
 
@@ -158,6 +160,7 @@ public class Player : MonoBehaviour {
 		isInCombo = true;
 		comboTimer = 0;
 
+		Play.Shake (0.05f);
 
 		Instantiate (meleeAtk, transform.position, Quaternion.Euler (new Vector3 (0, 0, bulletDir)));
 		atkComboCount++;
@@ -191,7 +194,6 @@ public class Player : MonoBehaviour {
 	}
 
 	void EndCombo(){
-		Debug.Log ("end combo");
 		atkComboCount = 0;
 		comboTimer = 0;
 		isInCombo = false;
@@ -240,7 +242,6 @@ public class Player : MonoBehaviour {
 
 	void SwimControls(){
 		if (isSwimming) {
-			Debug.Log (rigidbody2D.velocity.y);
 			if(rigidbody2D.velocity.y < maxSwimSpeed){
 				rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, maxSwimSpeed);
 			}
@@ -254,6 +255,8 @@ public class Player : MonoBehaviour {
 		case LifeState.deadOnGround:
 			respawnCounter += Time.deltaTime;
 			if(respawnCounter > respawnTime){
+				// invul period
+				TurnOnCollisionWithEnemies();
 				state = LifeState.invul;
 				invulCounter = 0;
 				GetComponent<BlinkingSprite>().blinking = true;
@@ -263,6 +266,7 @@ public class Player : MonoBehaviour {
 		case LifeState.invul:
 			invulCounter += Time.deltaTime;
 			if(invulCounter > invulTime){
+				// respawn player
 				state = LifeState.alive;
 				isAlive = true;
 				GetComponent<SpriteRenderer>().enabled = true;
@@ -314,6 +318,9 @@ public class Player : MonoBehaviour {
 	}
 
 	void StartSwim(){
+		if (state == LifeState.knockback) {
+			state = LifeState.deadOnGround;	
+		}
 		rigidbody2D.gravityScale = waterGravity;
 		isSwimming = true;
 		canFly = false;
@@ -352,7 +359,10 @@ public class Player : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D col){
 		if (col.gameObject.tag == "water") {
-			StartSwim();
+			if(hasSwim || state == LifeState.knockback)
+				StartSwim();
+			else
+				Die (-1);
 		}
 	}
 
@@ -374,6 +384,14 @@ public class Player : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D col){
 		if (isAlive && col.gameObject.tag == "enemy") {
 		}
+		else if(col.gameObject.tag == "enemybullet"){
+			Hit (col.gameObject.transform.position.x);
+
+			if(col.gameObject.GetComponent<Bullet>() != null)
+				col.gameObject.GetComponent<Bullet>().Die();
+			else if(col.gameObject.GetComponent<Tentacle>() != null)
+				col.gameObject.GetComponent<Tentacle>().Die();
+		}
 		else{
 			if(col.gameObject.tag == "obstacle" && rigidbody2D.velocity.y == 0)
 				TouchGround();
@@ -386,7 +404,19 @@ public class Player : MonoBehaviour {
 		}
 	}
 
+	void TurnOffCollisionWithEnemies(){
+		Physics2D.IgnoreLayerCollision (10, 8);
+		Physics2D.IgnoreLayerCollision (10, 9);
+	}
+
+	void TurnOnCollisionWithEnemies(){
+		Physics2D.IgnoreLayerCollision(10, 8, false);
+		Physics2D.IgnoreLayerCollision(10, 9, false);
+	}
+
 	void Die(float enemyX){
+		TurnOffCollisionWithEnemies ();
+
 		isAlive = false;
 		state = LifeState.knockback;
 		atkComboCount = 0;

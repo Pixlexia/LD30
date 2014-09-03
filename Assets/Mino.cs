@@ -7,23 +7,17 @@ public class Mino : Enemy {
 	public override void Start () {
 		base.Start ();
 
-		hp = 6;
-		speed = 80;
+		hp = 3;
+		speed = 100;
+
+		rangeAttemptAttack = 8;
 	}
 	
 	// Update is called once per frame
 	public override void Update () {
 		base.Update ();
 
-		CheckDistanceFromPlayer ();
-
-		if(Player.EnemyCanActionPlayer())
+		if(distanceFromPlayer < rangeAttemptAttack && Player.EnemyCanActionPlayer())
 			FollowPlayer ();
-	}
-
-	public void FollowPlayer(){
-		float mod = (dir > 0) ? 1 : -1;
-
-		rigidbody2D.AddRelativeForce(new Vector2(mod * speed, 0));
 	}
 }

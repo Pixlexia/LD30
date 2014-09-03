@@ -12,7 +12,15 @@ public class Camera : MonoBehaviour {
 
 	void FixedUpdate(){
 		playerpos = GameObject.Find ("player").gameObject.transform.position;
-		transform.position = Vector3.Lerp (transform.position, new Vector3(playerpos.x, playerpos.y, transform.position.z), 
+
+		float mod = 0.5f;
+
+		if (Application.loadedLevelName == "boss2")
+			mod = -2f;
+		else if(Application.loadedLevelName == "boss1")
+			mod = 0;
+
+		transform.position = Vector3.Lerp (transform.position, new Vector3(playerpos.x, playerpos.y + mod, transform.position.z), 
 		                                   Time.deltaTime * smooth);
 	}
 	

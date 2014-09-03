@@ -24,15 +24,26 @@ public class Bullet : MonoBehaviour {
 
 	void CalculateRange(){
 		if (Vector3.Distance (initialPos, transform.position) > range) {
-			Destroy (this.gameObject);		
+			Die();
 		}
 	}
 
-	void OnTriggerEnter2D(Collider2D col){
+	public virtual void Die(){
+
+		Destroy (this.gameObject);		
+	}
+
+	void OnCollisionEnter2D(Collision2D col){
 		if (col.gameObject.tag == "obstacle") {
 			// create spark particle
+			Die ();
 			Instantiate (wallSpark, transform.position, Quaternion.identity);
-			Destroy (this.gameObject);
+		}
+		else if(col.gameObject.tag == "enemy"){
+			Debug.Log ("hit enm");
+		}	
+		else if(col.gameObject.name == "player"){
+			// Player.cs will destroy this bullet
 		}
 	}
 }

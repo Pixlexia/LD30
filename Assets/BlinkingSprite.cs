@@ -19,7 +19,6 @@ public class BlinkingSprite : MonoBehaviour {
 			blinkCounter += Time.deltaTime;
 
 			if(blinkCounter > blinkTime){
-				Debug.Log ("switch");
 				bool enabled = GetComponent<SpriteRenderer>().enabled;
 				GetComponent<SpriteRenderer>().enabled = (enabled)? false : true;
 				blinkCounter = 0;

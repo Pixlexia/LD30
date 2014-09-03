@@ -8,7 +8,9 @@ public class Archer : Enemy {
 	// Use this for initialization
 	public override void Start () {
 		base.Start ();
-		hp = 5000;
+		hp = 4;
+		atkDelay = 2f;
+		rangeAttemptAttack = 10f;
 	}
 	
 	// Update is called once per frame
@@ -17,8 +19,10 @@ public class Archer : Enemy {
 	}
 
 	public override void Attack(){
-//		Instantiate (bullet, transform.position, Quaternion.identity);
-//		canAtk = false;
-//		atkCounter = 0;
+		if (distanceFromPlayer < rangeAttemptAttack && Player.EnemyCanActionPlayer()) {
+			int dir = (GameObject.Find ("player").transform.position.x - transform.position.x > 0) ? 0 : -180;
+			Instantiate (bullet, transform.position + new Vector3(0,Random.Range (0,0.3f),0), Quaternion.Euler(new Vector3(0,0,dir)));
+			base.Attack ();
+		}
 	}
 }

@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Portal : MonoBehaviour {
 
+	public int doorTo;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -16,7 +18,7 @@ public class Portal : MonoBehaviour {
 	void OnTriggerStay2D(Collider2D col){
 		if (col.gameObject.name == "player") {
 			if(Input.GetKeyDown(KeyCode.UpArrow)){
-				Application.LoadLevel ("2");
+				Application.LoadLevel ("level" + doorTo);
 			}
 		}
 	}

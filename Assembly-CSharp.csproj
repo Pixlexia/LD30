@@ -47,18 +47,33 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Archer.cs" />
+     <Compile Include="Assets\ArcherArrow.cs" />
      <Compile Include="Assets\Attackable.cs" />
      <Compile Include="Assets\BlinkingSprite.cs" />
+     <Compile Include="Assets\Boss.cs" />
+     <Compile Include="Assets\Boss1.cs" />
+     <Compile Include="Assets\Boss2.cs" />
+     <Compile Include="Assets\BossPortal.cs" />
      <Compile Include="Assets\Bullet.cs" />
      <Compile Include="Assets\Camera.cs" />
      <Compile Include="Assets\Enemy.cs" />
+     <Compile Include="Assets\FloatingHorizontal.cs" />
+     <Compile Include="Assets\LeftWall.cs" />
+     <Compile Include="Assets\LevelPortal.cs" />
      <Compile Include="Assets\LongRangeAttacker.cs" />
      <Compile Include="Assets\MeleeBullet.cs" />
      <Compile Include="Assets\Mino.cs" />
+     <Compile Include="Assets\Owl.cs" />
+     <Compile Include="Assets\OwlBullet.cs" />
      <Compile Include="Assets\Particle.cs" />
+     <Compile Include="Assets\Play.cs" />
      <Compile Include="Assets\Player.cs" />
      <Compile Include="Assets\Portal.cs" />
+     <Compile Include="Assets\RightWall.cs" />
      <Compile Include="Assets\Slash.cs" />
+     <Compile Include="Assets\Tentacle.cs" />
+     <Compile Include="Assets\WaterBossBullet.cs" />
+     <Compile Include="Assets\Wolf.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

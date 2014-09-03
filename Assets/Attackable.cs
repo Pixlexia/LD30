@@ -42,14 +42,16 @@ public class Attackable : MonoBehaviour {
 			BulletHit (col);
 	}
 
-	void BulletHit(Collider2D col){
+	// hit by player melee or ranged
+	public virtual void BulletHit(Collider2D col){
 		Bullet bullet = col.gameObject.GetComponent<Bullet> ();
 		if (bullet != null) {
 			// take damage
 			Hit (bullet.damage);
 
 			// instantiate particle
-			Instantiate (sparkParticle, transform.position, Quaternion.identity);
+			if(sparkParticle != null)
+				Instantiate (sparkParticle, transform.position, Quaternion.identity);
 
 			// destroy bullet
 			Destroy (bullet.gameObject);
@@ -67,6 +69,11 @@ public class Attackable : MonoBehaviour {
 	}
 
 	public virtual void Die(){
+		if (dieParticle != null) {
+			Instantiate (dieParticle, transform.position, Quaternion.identity);
+			Debug.Log ("enemy die");
+		}
+
 		Destroy (this.gameObject);
 	}
 }
